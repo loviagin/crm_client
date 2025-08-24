@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct CRMApp: App {
+    @StateObject private var mainViewModel = MainViewModel()
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(mainViewModel)
         }
     }
 }

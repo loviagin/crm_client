@@ -8,17 +8,35 @@
 import SwiftUI
 
 struct ContentView: View {
+    @EnvironmentObject private var viewModel: MainViewModel
+    @State private var isLoading = true
+        
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        Group {
+            if isLoading { // loading state
+                ProgressView()
+                    .progressViewStyle(.circular)
+            } else if viewModel.user == nil { // not authorized
+                AuthView(isLoading: $isLoading)
+            } else { // authorized
+                TabsView()
+            }
         }
-        .padding()
+        .task {
+            let user = await viewModel.fetchUser()
+            
+            DispatchQueue.main.async {
+                withAnimation {
+                    viewModel.user = user
+                    isLoading = false
+                }
+            }
+        }
     }
 }
 
 #Preview {
     ContentView()
+        .frame(minWidth: 600, minHeight: 400)
+        .environmentObject(MainViewModel.mock)
 }
