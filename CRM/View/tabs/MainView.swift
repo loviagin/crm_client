@@ -16,6 +16,7 @@ struct MainView: View {
                 viewModel.logout()
             }
         }
+        .navigationTitle("Dashboard")
     }
 }
 

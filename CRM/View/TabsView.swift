@@ -43,11 +43,11 @@ struct TabsView: View {
                     
                     //MARK: - MENU ITEMS
                     VStack(alignment: .leading, spacing: 0) {
-                        SidebarButtonView(showSidebar: $showSidebar, icon: "house", text: "Dashboard", tab: .home)
+                        SidebarButtonView(showSidebar: $showSidebar, icon: "house", text: "Dashboard", tab: .home, number: "1")
                         .padding(.bottom, 5)
                         
-                        SidebarButtonView(showSidebar: $showSidebar, icon: "dollarsign.circle", text: "Finance", tab: .finance)
-                        SidebarButtonView(showSidebar: $showSidebar, icon: "person.2.circle", text: "Emploeys", tab: .another)
+                        SidebarButtonView(showSidebar: $showSidebar, icon: "dollarsign.circle", text: "Finance", tab: .finance, number: "2")
+                        SidebarButtonView(showSidebar: $showSidebar, icon: "person.2.circle", text: "Employees", tab: .another, number: "3")
                     }
                 }
                 .padding(.top)
@@ -55,7 +55,7 @@ struct TabsView: View {
             
             Spacer()
             
-            SidebarButtonView(showSidebar: $showSidebar, icon: "gearshape", text: "Settings", tab: .settings)
+            SidebarButtonView(showSidebar: $showSidebar, icon: "gearshape", text: "Settings", tab: .settings, number: "0")
                 .padding(.bottom, 5)
             
             dividerSidebarView
@@ -102,6 +102,7 @@ struct SidebarButtonView: View {
     @State var icon: String
     @State var text: String
     @State var tab: AppTab
+    @State var number: KeyEquivalent
     
     var body: some View {
         Button {
@@ -131,6 +132,7 @@ struct SidebarButtonView: View {
             }
         }
         .buttonStyle(.plain)
+        .keyboardShortcut(number, modifiers: .command)
     }
 }
 

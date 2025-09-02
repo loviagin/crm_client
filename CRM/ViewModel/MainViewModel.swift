@@ -18,7 +18,7 @@ class MainViewModel: ObservableObject {
     }
     @Published var darkLogo: Data? {
         didSet {
-            UserDefaults.standard.set(lightLogo, forKey: "logo_dark")
+            UserDefaults.standard.set(darkLogo, forKey: "logo_dark")
         }
     }
     
