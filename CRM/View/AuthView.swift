@@ -268,7 +268,8 @@ struct LogoView: View {
     @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject private var viewModel: MainViewModel
 
-    @State var imageSize: CGFloat = 200
+    @State var imageWidth: CGFloat = 200
+    @State var imageHeight: CGFloat = 50
     
     var body: some View {
         VStack {
@@ -278,7 +279,7 @@ struct LogoView: View {
                 Image(nsImage: image)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(width: imageSize)
+                    .frame(width: imageWidth, height: imageHeight)
             } else {
                 Text("CRM")
                     .font(.largeTitle)

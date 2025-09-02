@@ -89,6 +89,7 @@ extension MainViewModel {
     static var mock: MainViewModel {
         let viewModel = MainViewModel()
     
+        viewModel.user = User(name: "Ilia", login: "ilia", email: "ilia@lovigin.com", role: "admin")
         return viewModel
     }
 }

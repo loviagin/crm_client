@@ -11,13 +11,14 @@ import PhotosUI
 struct SettingsView: View {
     @AppStorage("appTheme") private var appTheme: String = "system"
     @EnvironmentObject private var viewModel: MainViewModel
-//    @StateObject private var viewModel = SettingsViewModel()
     
     @State private var selectedLightImage: [PhotosPickerItem] = []
     @State private var selectedDarkImage: [PhotosPickerItem] = []
     
     @State private var loadingLightImage = false
     @State private var loadingDarkImage = false
+    
+    @State private var showLogoutAlert = false
     var body: some View {
         Form {
             Section {
@@ -72,6 +73,23 @@ struct SettingsView: View {
                 Text("Appearance")
                     .font(.headline)
                     .foregroundStyle(.gray)
+            }
+            
+            Section {
+                Button {
+                    showLogoutAlert = true
+                } label: {
+                    Label("Logout", systemImage: "rectangle.portrait.and.arrow.forward")
+                        .foregroundStyle(.red)
+                        .padding(5)
+                }
+                .alert("Are you sure you want to logout?", isPresented: $showLogoutAlert) {
+                    Button("Logout", role: .destructive) {
+                        viewModel.logout()
+                    }
+                } message: {
+                    Text("You will need to enter your credentials again")
+                }
             }
         }
         .formStyle(.grouped)

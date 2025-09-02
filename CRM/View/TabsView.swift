@@ -19,7 +19,7 @@ struct TabsView: View {
                 
                 switch viewModel.selectedTab {
                 case .home:
-                    MainView()
+                    DashboardView()
                 case .finance:
                     FinanceView()
                 case .settings:
@@ -47,7 +47,7 @@ struct TabsView: View {
                         .padding(.bottom, 5)
                         
                         SidebarButtonView(showSidebar: $showSidebar, icon: "dollarsign.circle", text: "Finance", tab: .finance, number: "2")
-                        SidebarButtonView(showSidebar: $showSidebar, icon: "person.2.circle", text: "Employees", tab: .another, number: "3")
+                        SidebarButtonView(showSidebar: $showSidebar, icon: "person.2.circle", text: "Teams", tab: .another, number: "3")
                     }
                 }
                 .padding(.top)
@@ -78,7 +78,7 @@ struct TabsView: View {
     var logoSidebarView: some View {
         Group {
             if showSidebar {
-                LogoView(imageSize: 100)
+                LogoView(imageWidth: 100, imageHeight: 25)
             } else {
                 Text("C")
                     .font(.largeTitle)
@@ -138,5 +138,6 @@ struct SidebarButtonView: View {
 
 #Preview {
     TabsView()
+        .frame(minWidth: 600, minHeight: 400)
         .environmentObject(MainViewModel.mock)
 }
