@@ -26,33 +26,69 @@ struct AuthView: View {
     var maxWidth: CGFloat = 350
     
     var body: some View {
-        VStack {
-            Text("CRM")
-                .font(.largeTitle)
-                .bold()
-                .padding(.bottom)
-            
-            if isRegistration {
-                registrationView
-            } else {
-                loginView
-                loginButtonsView
+        NavigationStack {
+            ScrollView {
+                VStack {
+                    LogoView()
+                        .padding(.bottom)
+
+                    if isRegistration {
+                        registrationView
+                    } else {
+                        loginView
+                        loginButtonsView
+                    }
+                }
+                .padding(30)
             }
-        }
-        .padding(30)
-        .onAppear {
-            withAnimation {
-                focuseField = .login
+            .scrollIndicators(.never)
+            .navigationTitle("Login")
+            .onAppear {
+                withAnimation {
+                    focuseField = .login
+                }
             }
-        }
-        .alert("CRM", isPresented: $showError) {
-            Button("OK", role: .destructive) {
-                setError()
+            .toolbar(content: {
+                ToolbarItem(placement: .confirmationAction) {
+                    NavigationLink {
+                        SettingsView()
+                    } label: {
+                        Image(systemName: "gearshape")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 16)
+    //                    Text("Settings")
+                    }
+                    .buttonStyle(.plain)
+                }
+            })
+            .alert("CRM", isPresented: $showError) {
+                Button("OK", role: .destructive) {
+                    setError()
+                }
+            } message: {
+                Text(errorMessage)
             }
-        } message: {
-            Text(errorMessage)
         }
     }
+    
+//    var logoView: some View {
+//        Group {
+//            if let data = colorScheme == .light ?
+//                viewModel.darkLogo : viewModel.lightLogo,
+//                let image = NSImage(data: data) {
+//                Image(nsImage: image)
+//                    .resizable()
+//                    .aspectRatio(contentMode: .fit)
+//                    .frame(width: 200)
+//            } else {
+//                Text("CRM")
+//                    .font(.largeTitle)
+//                    .bold()
+//            }
+//        }
+//        .padding(.bottom)
+//    }
     
     var loginButtonsView: some View {
         VStack {
@@ -224,5 +260,30 @@ struct AuthView: View {
     
     enum FocuseField {
         case login, password, name, email, role
+    }
+}
+
+
+struct LogoView: View {
+    @Environment(\.colorScheme) var colorScheme
+    @EnvironmentObject private var viewModel: MainViewModel
+
+    @State var imageSize: CGFloat = 200
+    
+    var body: some View {
+        VStack {
+            if let data = colorScheme == .light ?
+                viewModel.darkLogo : viewModel.lightLogo,
+                let image = NSImage(data: data) {
+                Image(nsImage: image)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: imageSize)
+            } else {
+                Text("CRM")
+                    .font(.largeTitle)
+                    .bold()
+            }
+        }
     }
 }

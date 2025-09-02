@@ -11,6 +11,21 @@ class MainViewModel: ObservableObject {
     @Published var selectedTab: AppTab = .home
     @Published var user: User? = nil
     
+    @Published var lightLogo: Data? {
+        didSet {
+            UserDefaults.standard.set(lightLogo, forKey: "logo_light")
+        }
+    }
+    @Published var darkLogo: Data? {
+        didSet {
+            UserDefaults.standard.set(lightLogo, forKey: "logo_dark")
+        }
+    }
+    
+    init() {
+        (lightLogo, darkLogo) = getLogos()
+    }
+    
     func fetchUser() async -> User? {
         if let token = UserService.shared.checkToken() {
             do {
@@ -53,10 +68,21 @@ class MainViewModel: ObservableObject {
             return nil
         }
     }
+    
+    func getLogos() -> (Data?, Data?) {
+        return (UserDefaults.standard.data(forKey: "logo_light"), UserDefaults.standard.data(forKey: "logo_dark"))
+    }
+ 
+    func logout() {
+        DispatchQueue.main.async {
+            self.user = nil
+            KeychainHelper.shared.delete(account: "authToken")
+        }
+    }
 }
 
 enum AppTab {
-    case home
+    case home, finance, settings, another
 }
 
 extension MainViewModel {
