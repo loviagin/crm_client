@@ -20,80 +20,98 @@ struct SettingsView: View {
     
     @State private var showLogoutAlert = false
     var body: some View {
-        Form {
-            Section {
-                Text("Light logo")
-                    .bold()
-                    .padding(.top, 10)
-                HStack(alignment: .center, spacing: 15) {
-                    PhotosPicker(selection: $selectedLightImage, maxSelectionCount: 1, matching: .images) { selectLightImageView }
-                    .onChange(of: selectedLightImage) { _, newValue in
-                        Task {
-                            await loadImage(newValue, type: .light)
-                        }
+        NavigationStack {
+            Form {
+                Section {
+                    NavigationLink {
+                        NetworkSettingsView()
+                    } label: {
+                        Label("Network settings", systemImage: "network")
                     }
-                    
-                    ImageView(imageData: $viewModel.lightLogo)
                 }
                 
-                Text("Dark logo")
-                    .bold()
-                    .padding(.top, 10)
-                
-                HStack(alignment: .center, spacing: 15) {
-                    PhotosPicker(selection: $selectedDarkImage, maxSelectionCount: 1, matching: .images) {
-                        selectDarkImageView
+                Section {
+                    NavigationLink {
+                        DevicesView()
+                    } label: {
+                        Label("Devices", systemImage: "laptopcomputer")
                     }
-                    .onChange(of: selectedDarkImage) { _, newValue in
-                        Task {
-                            await loadImage(newValue, type: .dark)
-                        }
+                }
+                
+                Section {
+                    Text("Light logo")
+                        .bold()
+                        .padding(.top, 10)
+                    HStack(alignment: .center, spacing: 15) {
+                        PhotosPicker(selection: $selectedLightImage, maxSelectionCount: 1, matching: .images) { selectLightImageView }
+                            .onChange(of: selectedLightImage) { _, newValue in
+                                Task {
+                                    await loadImage(newValue, type: .light)
+                                }
+                            }
+                        
+                        ImageView(imageData: $viewModel.lightLogo)
                     }
                     
-                    ImageView(imageData: $viewModel.darkLogo)
+                    Text("Dark logo")
+                        .bold()
+                        .padding(.top, 10)
+                    
+                    HStack(alignment: .center, spacing: 15) {
+                        PhotosPicker(selection: $selectedDarkImage, maxSelectionCount: 1, matching: .images) {
+                            selectDarkImageView
+                        }
+                        .onChange(of: selectedDarkImage) { _, newValue in
+                            Task {
+                                await loadImage(newValue, type: .dark)
+                            }
+                        }
+                        
+                        ImageView(imageData: $viewModel.darkLogo)
+                    }
+                } header: {
+                    VStack(alignment: .leading) {
+                        Text("Logos")
+                            .font(.headline)
+                            .foregroundStyle(.gray)
+                        
+                        Text("You can upload your company logo in dark and light modes here")
+                            .font(.caption)
+                    }
                 }
-            } header: {
-                VStack(alignment: .leading) {
-                    Text("Logos")
+                
+                Section {
+                    Picker("Choose app theme", selection: $appTheme) {
+                        Text("System").tag("system")
+                        Text("Light").tag("light")
+                        Text("Dark").tag("dark")
+                    }
+                } header: {
+                    Text("Appearance")
                         .font(.headline)
                         .foregroundStyle(.gray)
-                    
-                    Text("You can upload your company logo in dark and light modes here")
-                        .font(.caption)
                 }
-            }
-            
-            Section {
-                Picker("Choose app theme", selection: $appTheme) {
-                    Text("System").tag("system")
-                    Text("Light").tag("light")
-                    Text("Dark").tag("dark")
-                }
-            } header: {
-                Text("Appearance")
-                    .font(.headline)
-                    .foregroundStyle(.gray)
-            }
-            
-            Section {
-                Button {
-                    showLogoutAlert = true
-                } label: {
-                    Label("Logout", systemImage: "rectangle.portrait.and.arrow.forward")
-                        .foregroundStyle(.red)
-                        .padding(5)
-                }
-                .alert("Are you sure you want to logout?", isPresented: $showLogoutAlert) {
-                    Button("Logout", role: .destructive) {
-                        viewModel.logout()
+                
+                Section {
+                    Button {
+                        showLogoutAlert = true
+                    } label: {
+                        Label("Logout", systemImage: "rectangle.portrait.and.arrow.forward")
+                            .foregroundStyle(.red)
+                            .padding(5)
                     }
-                } message: {
-                    Text("You will need to enter your credentials again")
+                    .alert("Are you sure you want to logout?", isPresented: $showLogoutAlert) {
+                        Button("Logout", role: .destructive) {
+                            viewModel.logout()
+                        }
+                    } message: {
+                        Text("You will need to enter your credentials again")
+                    }
                 }
             }
+            .formStyle(.grouped)
+            .navigationTitle("Settings")
         }
-        .formStyle(.grouped)
-        .navigationTitle("Settings")
     }
     
     var selectDarkImageView: some View {

@@ -10,26 +10,30 @@ import SwiftUI
 struct TabsView: View {
     @EnvironmentObject private var viewModel: MainViewModel
     
+//    #if DEBUG
+//    @State private var showSidebar = false
+//    #else
     @State private var showSidebar = true
+//    #endif
     
     var body: some View {
-        NavigationStack {
-            HStack {
-                sidebarView
-                
-                switch viewModel.selectedTab {
-                case .home:
-                    DashboardView()
-                case .finance:
-                    FinanceView()
-                case .settings:
-                    SettingsView()
-                case .another:
-                    DevelopingView()
-                }
-                
-                Spacer()
+        HStack {
+            sidebarView
+            
+            switch viewModel.selectedTab {
+            case .home:
+                DashboardView()
+            case .finance:
+                FinanceView()
+            case .settings:
+                SettingsView()
+            case .teams:
+                TeamsView()
+            case .another:
+                DevelopingView()
             }
+            
+            Spacer()
         }
     }
     
@@ -41,13 +45,13 @@ struct TabsView: View {
                     
                     dividerSidebarView
                     
-                    //MARK: - MENU ITEMS
+                    // MARK: - MENU ITEMS
                     VStack(alignment: .leading, spacing: 0) {
                         SidebarButtonView(showSidebar: $showSidebar, icon: "house", text: "Dashboard", tab: .home, number: "1")
                         .padding(.bottom, 5)
                         
                         SidebarButtonView(showSidebar: $showSidebar, icon: "dollarsign.circle", text: "Finance", tab: .finance, number: "2")
-                        SidebarButtonView(showSidebar: $showSidebar, icon: "person.2.circle", text: "Teams", tab: .another, number: "3")
+                        SidebarButtonView(showSidebar: $showSidebar, icon: "person.2.circle", text: "Teams", tab: .teams, number: "3")
                     }
                 }
                 .padding(.top)
@@ -78,7 +82,7 @@ struct TabsView: View {
     var logoSidebarView: some View {
         Group {
             if showSidebar {
-                LogoView(imageWidth: 100, imageHeight: 25)
+                LogoView(imageWidth: 110, imageHeight: 25)
             } else {
                 Text("C")
                     .font(.largeTitle)
@@ -138,6 +142,6 @@ struct SidebarButtonView: View {
 
 #Preview {
     TabsView()
-        .frame(minWidth: 600, minHeight: 400)
+        .frame(minWidth: 700, minHeight: 400)
         .environmentObject(MainViewModel.mock)
 }

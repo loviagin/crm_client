@@ -82,13 +82,13 @@ class MainViewModel: ObservableObject {
 }
 
 enum AppTab {
-    case home, finance, settings, another
+    case home, finance, settings, teams, another
 }
 
 extension MainViewModel {
     static var mock: MainViewModel {
         let viewModel = MainViewModel()
-    
+        viewModel.selectedTab = .teams
         viewModel.user = User(name: "Ilia", login: "ilia", email: "ilia@lovigin.com", role: "admin")
         return viewModel
     }

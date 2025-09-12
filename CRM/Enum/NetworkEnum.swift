@@ -8,5 +8,5 @@
 import Foundation
 
 enum NetworkEnum: String {
-    case baseUrl = "http://10.66.66.114:8080"
+    case baseUrl = "http://10.192.217.152:8080"
 }

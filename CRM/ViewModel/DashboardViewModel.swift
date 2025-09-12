@@ -11,7 +11,7 @@ class DashboardViewModel: ObservableObject {
     @Published var employeesCount: Int = 0
     
     init() {
-        Task {
+        Task { @MainActor in
             self.employeesCount = await  self.getEmployeesCount()
             print(self.employeesCount)
         }
