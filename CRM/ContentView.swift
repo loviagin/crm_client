@@ -37,6 +37,6 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .frame(minWidth: 650, minHeight: 400)
+        .frame(minWidth: 670, minHeight: 400)
         .environmentObject(MainViewModel.mock)
 }

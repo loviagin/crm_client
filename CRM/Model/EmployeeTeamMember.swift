@@ -13,6 +13,4 @@ struct EmployeeTeamMember: Identifiable, Codable {
     var groupId: String    = ""
     var role: String?      = nil  // "owner" | "admin" | "member"
     var joinedAt: Date?    = nil
-    
-    
 }

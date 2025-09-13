@@ -29,6 +29,8 @@ struct TabsView: View {
                 SettingsView()
             case .teams:
                 TeamsView()
+            case .employees:
+                EmployeesView()
             case .another:
                 DevelopingView()
             }
@@ -51,7 +53,11 @@ struct TabsView: View {
                         .padding(.bottom, 5)
                         
                         SidebarButtonView(showSidebar: $showSidebar, icon: "dollarsign.circle", text: "Finance", tab: .finance, number: "2")
-                        SidebarButtonView(showSidebar: $showSidebar, icon: "person.2.circle", text: "Teams", tab: .teams, number: "3")
+                        SidebarMenuButtonView(showSidebar: $showSidebar, icon: "person.2.circle", text: "Team", currentTab: .teams, tabs: [.teams, .employees], number: "3")
+                        if viewModel.selectedTab == .teams || viewModel.selectedTab == .employees {
+                            SidebarButtonSubView(showSidebar: $showSidebar, icon: "person.3", text: "Teams", tab: .teams)
+                            SidebarButtonSubView(showSidebar: $showSidebar, icon: "person.2", text: "Employees", tab: .employees)
+                        }
                     }
                 }
                 .padding(.top)
@@ -137,6 +143,87 @@ struct SidebarButtonView: View {
         }
         .buttonStyle(.plain)
         .keyboardShortcut(number, modifiers: .command)
+    }
+}
+
+struct SidebarMenuButtonView: View {
+    @EnvironmentObject private var viewModel: MainViewModel
+    
+    @Binding var showSidebar: Bool
+    @State var icon: String
+    @State var text: String
+    @State var currentTab: AppTab
+    @State var tabs: [AppTab]
+    @State var number: KeyEquivalent
+    
+    var body: some View {
+        Button {
+            withAnimation {
+                viewModel.selectedTab = currentTab
+            }
+        } label: {
+            HStack {
+                Image(systemName: icon)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 17)
+                
+                if showSidebar {
+                    Text(text)
+                }
+            }
+            .padding(.vertical, 7)
+            .padding(.leading, 15)
+            .padding(.trailing, 15)
+            .frame(maxWidth: showSidebar ? 150 : 55, alignment: .leading)
+            .contentShape(Rectangle())
+            .overlay {
+                if tabs.contains(viewModel.selectedTab) {
+                    RoundedRectangle(cornerRadius: 0).fill(Color.foreground.opacity(0.1))
+                }
+            }
+        }
+        .buttonStyle(.plain)
+        .keyboardShortcut(number, modifiers: .command)
+    }
+}
+
+struct SidebarButtonSubView: View {
+    @EnvironmentObject private var viewModel: MainViewModel
+    
+    @Binding var showSidebar: Bool
+    @State var icon: String
+    @State var text: String
+    @State var tab: AppTab
+    
+    var body: some View {
+        Button {
+            withAnimation {
+                viewModel.selectedTab = tab
+            }
+        } label: {
+            HStack {
+                Image(systemName: icon)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 17)
+                
+                if showSidebar {
+                    Text(text)
+                }
+            }
+            .padding(.vertical, 7)
+            .padding(.leading, 25)
+            .padding(.trailing, 15)
+            .frame(maxWidth: showSidebar ? 150 : 55, alignment: .leading)
+            .contentShape(Rectangle())
+            .overlay {
+                if viewModel.selectedTab == tab {
+                    RoundedRectangle(cornerRadius: 0).fill(Color.foreground.opacity(0.2))
+                }
+            }
+        }
+        .buttonStyle(.plain)
     }
 }
 

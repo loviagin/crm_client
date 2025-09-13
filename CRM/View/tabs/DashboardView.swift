@@ -66,6 +66,20 @@ struct DashboardView: View {
                     }
                     
                     VStack {
+                        VStack(alignment: .center, spacing: 6) {
+                            Text("\(dViewModel.teamsCount)")
+                                .font(.system(size: 24, weight: .bold, design: .rounded))
+                                .monospacedDigit()
+                            Text("Teams")
+                                .font(.footnote.weight(.semibold))
+                                .foregroundStyle(.secondary)
+                                .textCase(.uppercase)
+                                .tracking(0.8)
+                        }
+                        .padding(10)
+                        .frame(maxWidth: .infinity)
+                        .background(Color.foreground.opacity(0.1))
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
                         //                    VStack(alignment: .center, spacing: 6) {
                         //                        Text("\(dViewModel.employeesCount)")
                         //                            .font(.system(size: 34, weight: .bold, design: .rounded))
